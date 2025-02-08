@@ -111,6 +111,7 @@ local key_recover = function(mode, keys, backup)
     pcall(vim.api.nvim_buf_del_keymap, 0, mode, one)
   end
   for _, one in ipairs(backup) do
+    if one.rhs == nil then one.rhs = "" end
     vim.api.nvim_buf_set_keymap(0
     , one.mode
     , one.lhs
@@ -122,7 +123,8 @@ end
 
 local function popup()
   local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile')
+  --vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile') -- deprecated
+  vim.api.nvim_set_option_value('buftype','nofile',{ buf = buf })
   local width = 9
   local current_win = vim.api.nvim_get_current_win()
   local win_id = vim.api.nvim_open_win(buf, true, {
